@@ -28,40 +28,28 @@ const ScheduleIndicator = new Lang.Class({
         let image_item = new PopupMenu.PopupBaseMenuItem({can_focus: false, reactive: false});
         this.menu.addMenuItem(image_item);
 
-        let image = new Clutter.Image();
-        let pixbuf = GdkPixbuf.Pixbuf.new_from_file("/home/luka/Pictures/schedulegenerator.png");
+        let session = new Soup.SessionAsync();
+        Soup.Session.prototype.add_feature.call(session, new Soup.ProxyResolverDefault());
 
-        let image_actor = new Clutter.Actor({height: 600, width: 480});
-        image_actor.set_content(image);
-        /*image.set_data(
+        let request = Soup.Message.new_from_uri('GET', new Soup.URI(URL));
+        session.queue_message(request, ((session, message) => {
+
+            let file = Gio.File.new_for_path(Me.path + '/schedule.png')
+            let outstream = file.replace(null, false, Gio.FileCreateFlags.NONE,null)
+            outstream.write_bytes(message.response_body.flatten().get_as_bytes(),null)
+
+            let image = new Clutter.Image();
+            let pixbuf = GdkPixbuf.Pixbuf.new_from_file(Me.path + '/schedule.png');
+
+            let image_actor = new Clutter.Actor({height: 600, width: 480});
+            image_actor.set_content(image);
+            image.set_data(
                       pixbuf.get_pixels(),
                       pixbuf.get_has_alpha() ? Cogl.PixelFormat.RGBA_8888 : Cogl.PixelFormat.RGB_888,
                       480,
                       600,
                       pixbuf.get_rowstride()
                       );
-
-        image_item.actor.add_actor(image_actor);*/
-
-        let session = new Soup.SessionAsync();
-        Soup.Session.prototype.add_feature.call(session, new Soup.ProxyResolverDefault());
-
-        let request = Soup.Message.new_from_uri('GET', new Soup.URI("http://i.imgur.com/LaqDoW7.png"));
-        session.queue_message(request, ((session, message) => {
-          global.log("testnigga");
-/*
-            let file = Gio.File.new_for_path('imgur.png')
-            let outstream = file.replace(null, false, Gio.FileCreateFlags.NONE,null)
-            outstream.write_bytes(
-              message.response_body.flatten().get_as_bytes(),null)
-*/
-            //let res = Gio.Resource.new_from_data(message.response_body.flatten().get_as_bytes());
-
-            //log('[EXTENSION_LOG]', dl_pixbuf);
-
-          let dl_pixbuf = GdkPixbuf.Pixbuf.new_from_inline(message.response_body.flatten().get_as_bytes(), true);
-
-          global.log("donenigga");
 
             image_item.actor.add_actor(image_actor);
         }));
