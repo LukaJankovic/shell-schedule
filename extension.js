@@ -11,7 +11,19 @@ const Clutter = imports.gi.Clutter;
 const Cogl = imports.gi.Cogl;
 const Soup = imports.gi.Soup;
 
-const URL = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid=89920/sv-se&type=1&id={02388C5C-4692-42AF-9CED-E93ED98A5D3B}&period=&week=9&mode=0&printer=0&colors=32&head=0&clock=0&foot=0&day=0&width=480&height=600&maxwidth=1235&maxheight=1208";
+function getWeekNumber(d) {
+    // Copy date so don't modify original
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    // Set to nearest Thursday: current date + 4 - current day number
+    // Make Sunday's day number 7
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    // Get first day of year
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    // Calculate full weeks to nearest Thursday
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    // Return array of year and week number
+    return [d.getUTCFullYear(), weekNo];
+}
 
 const ScheduleIndicator = new Lang.Class({
     Name: "ScheduleIndicator",
@@ -25,25 +37,54 @@ const ScheduleIndicator = new Lang.Class({
         this.icon = new St.Icon({ gicon: gicon, style_class: 'system-status-icon' });
         this.actor.add_child(this.icon);
 
-        let image_item = new PopupMenu.PopupBaseMenuItem({can_focus: false, reactive: false});
-        this.menu.addMenuItem(image_item);
+        //this._loadschedule();
+    },
+
+    //Overwriting
+    _onEvent: function(actor, event) {
+
+        if ((event.type() == Clutter.EventType.TOUCH_BEGIN ||
+             event.type() == Clutter.EventType.BUTTON_PRESS) &&
+             !this.menu.isOpen) {
+
+            this._loadschedule();
+        }
+
+        return(this.parent(actor, event));
+    },
+
+    _loadschedule: function() {
+
+        if (!this.image_item) {
+            this.image_item = new PopupMenu.PopupBaseMenuItem({can_focus: false, reactive: false});
+            this.menu.addMenuItem(this.image_item);
+        }
+
+        if (!this.image) {
+            this.image = new Clutter.Image();
+        }
+
+        if (!this.image_actor) {
+            this.image_actor = new Clutter.Actor({height: 600, width: 480});
+            this.image_item.actor.add_actor(this.image_actor);
+        }
 
         let session = new Soup.SessionAsync();
         Soup.Session.prototype.add_feature.call(session, new Soup.ProxyResolverDefault());
 
+        const URL = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid=89920/sv-se&id={02388C5C-4692-42AF-9CED-E93ED98A5D3B}&period=&week=10&colors=32&day=0&width=480&height=600";
+
         let request = Soup.Message.new_from_uri('GET', new Soup.URI(URL));
         session.queue_message(request, ((session, message) => {
 
-            let file = Gio.File.new_for_path(Me.path + '/schedule.png')
-            let outstream = file.replace(null, false, Gio.FileCreateFlags.NONE,null)
-            outstream.write_bytes(message.response_body.flatten().get_as_bytes(),null)
+            let file = Gio.File.new_for_path(Me.path + '/schedule.png');
+            file.delete(Gio.Cancellable.new());
+            let outstream = file.replace(null, false, Gio.FileCreateFlags.NONE,null);
+            outstream.write_bytes(message.response_body.flatten().get_as_bytes(),null);
 
-            let image = new Clutter.Image();
             let pixbuf = GdkPixbuf.Pixbuf.new_from_file(Me.path + '/schedule.png');
 
-            let image_actor = new Clutter.Actor({height: 600, width: 480});
-            image_actor.set_content(image);
-            image.set_data(
+            this.image.set_data(
                       pixbuf.get_pixels(),
                       pixbuf.get_has_alpha() ? Cogl.PixelFormat.RGBA_8888 : Cogl.PixelFormat.RGB_888,
                       480,
@@ -51,10 +92,10 @@ const ScheduleIndicator = new Lang.Class({
                       pixbuf.get_rowstride()
                       );
 
-            image_item.actor.add_actor(image_actor);
+            this.image_actor.set_content(this.image);
         }));
-    },
-})
+    }
+});
 
 let schedule_indicator;
 
