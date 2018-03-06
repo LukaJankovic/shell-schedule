@@ -11,18 +11,12 @@ const Clutter = imports.gi.Clutter;
 const Cogl = imports.gi.Cogl;
 const Soup = imports.gi.Soup;
 
-function getWeekNumber(d) {
-    // Copy date so don't modify original
-    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-    // Set to nearest Thursday: current date + 4 - current day number
-    // Make Sunday's day number 7
+function getWeekNumber() {
+    var d = new Date();
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
-    // Get first day of year
     var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-    // Calculate full weeks to nearest Thursday
     var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
-    // Return array of year and week number
-    return [d.getUTCFullYear(), weekNo];
+    return weekNo;
 }
 
 const ScheduleIndicator = new Lang.Class({
@@ -69,16 +63,23 @@ const ScheduleIndicator = new Lang.Class({
             this.image_item.actor.add_actor(this.image_actor);
         }
 
+        //Delete old schedule file
+        try {
+            let f = Gio.File.new_for_path(Me.path + '/schedule.png');
+            f.delete(Gio.Cancellable.new());
+        } catch(e) {
+            global.log("no schedule file to delete");
+        }
+
         let session = new Soup.SessionAsync();
         Soup.Session.prototype.add_feature.call(session, new Soup.ProxyResolverDefault());
 
-        const URL = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid=89920/sv-se&id={02388C5C-4692-42AF-9CED-E93ED98A5D3B}&period=&week=10&colors=32&day=0&width=480&height=600";
+        const URL = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid=89920/sv-se&id={02388C5C-4692-42AF-9CED-E93ED98A5D3B}&period=&week="+getWeekNumber()+"&colors=32&day=0&width=480&height=600";
 
         let request = Soup.Message.new_from_uri('GET', new Soup.URI(URL));
         session.queue_message(request, ((session, message) => {
 
             let file = Gio.File.new_for_path(Me.path + '/schedule.png');
-            file.delete(Gio.Cancellable.new());
             let outstream = file.replace(null, false, Gio.FileCreateFlags.NONE,null);
             outstream.write_bytes(message.response_body.flatten().get_as_bytes(),null);
 
