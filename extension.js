@@ -15,7 +15,7 @@ function getWeekNumber() {
     var d = new Date();
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
     var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1)/7);
     return weekNo;
 }
 
@@ -79,21 +79,25 @@ const ScheduleIndicator = new Lang.Class({
         let request = Soup.Message.new_from_uri('GET', new Soup.URI(URL));
         session.queue_message(request, ((session, message) => {
 
-            let file = Gio.File.new_for_path(Me.path + '/schedule.png');
-            let outstream = file.replace(null, false, Gio.FileCreateFlags.NONE,null);
-            outstream.write_bytes(message.response_body.flatten().get_as_bytes(),null);
+            global.log(message.status_code);
 
-            let pixbuf = GdkPixbuf.Pixbuf.new_from_file(Me.path + '/schedule.png');
+            if (message.status_code == 200) {
+                let file = Gio.File.new_for_path(Me.path + '/schedule.png');
+                let outstream = file.replace(null, false, Gio.FileCreateFlags.NONE,null);
+                outstream.write_bytes(message.response_body.flatten().get_as_bytes(),null);
 
-            this.image.set_data(
-                      pixbuf.get_pixels(),
-                      pixbuf.get_has_alpha() ? Cogl.PixelFormat.RGBA_8888 : Cogl.PixelFormat.RGB_888,
-                      480,
-                      600,
-                      pixbuf.get_rowstride()
-                      );
+                let pixbuf = GdkPixbuf.Pixbuf.new_from_file(Me.path + '/schedule.png');
 
-            this.image_actor.set_content(this.image);
+                this.image.set_data(
+                        pixbuf.get_pixels(),
+                        pixbuf.get_has_alpha() ? Cogl.PixelFormat.RGBA_8888 : Cogl.PixelFormat.RGB_888,
+                        480,
+                        600,
+                        pixbuf.get_rowstride()
+                        );
+
+                this.image_actor.set_content(this.image);
+            }
         }));
     }
 });
