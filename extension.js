@@ -74,7 +74,7 @@ const ScheduleIndicator = new Lang.Class({
         let session = new Soup.SessionAsync();
         Soup.Session.prototype.add_feature.call(session, new Soup.ProxyResolverDefault());
 
-        const URL = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid=89920/sv-se&id={02388C5C-4692-42AF-9CED-E93ED98A5D3B}&period=&week="+getWeekNumber()+"&colors=32&day=0&width=480&height=600";
+        const URL = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid=89920/sv-se&id=na15c&period=&week="+getWeekNumber()+"&colors=32&day=0&width=480&height=600";
 
         let request = Soup.Message.new_from_uri('GET', new Soup.URI(URL));
         session.queue_message(request, ((session, message) => {
