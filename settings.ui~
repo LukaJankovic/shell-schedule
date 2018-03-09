@@ -47,7 +47,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="school-list">
+                      <object class="GtkComboBox" id="school-list">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>

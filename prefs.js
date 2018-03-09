@@ -12,7 +12,11 @@ function buildPrefsWidget() {
     let buildable = new Gtk.Builder();
     buildable.add_objects_from_file(Me.dir.get_path() + '/settings.ui', ['prefs_widget']);
 
-    let box = buildable.get_object('prefs_widget');
+    let rootbox = buildable.get_object('prefs_widget');
 
-    return box;
+    let schoolbox = buildable.get_object('school-list')
+
+    schoolbox.append_text("text");
+
+    return rootbox;
 }
