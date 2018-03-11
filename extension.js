@@ -7,6 +7,7 @@ const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const GdkPixbuf = imports.gi.GdkPixbuf;
+const Gdk = imports.gi.Gdk;
 const Clutter = imports.gi.Clutter;
 const Cogl = imports.gi.Cogl;
 const Soup = imports.gi.Soup;
@@ -70,6 +71,11 @@ const ScheduleIndicator = new Lang.Class({
         } catch(e) {
             global.log("no schedule file to delete");
         }
+
+        //let main_monitor = Gdk.Display.get_default().get_monitor(0);
+        let scale_factor = Gdk.Screen.get_default().get_monitor_scale_factor(0)
+
+        global.log("scale factor " + scale_factor);
 
         let session = new Soup.SessionAsync();
         Soup.Session.prototype.add_feature.call(session, new Soup.ProxyResolverDefault());
