@@ -41,15 +41,22 @@ function buildPrefsWidget() {
     //School list
     schoolbox = buildable.get_object('school-list');
 
+    var currIndex = 0;
     for (var i = 0; i < schools.length; i++) {
         schoolbox.append_text(schools[i]["namn"]+" ("+schools[i]["stad"]+")");
+
+        if (schema.get_string("schoolid") == schools[i]["id"])
+            currIndex = i;
     }
+
+    schoolbox.set_active(currIndex);
 
     schoolbox.connect("changed", Lang.bind(this, this.school_changed));
 
     //ClassID
     classIDInput = buildable.get_object("class-entry");
     classIDInput.connect("activate", Lang.bind(this, this.class_changed));
+    classIDInput.set_text(schema.get_string("classid"));
 
     return rootbox;
 }
