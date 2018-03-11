@@ -3,8 +3,12 @@ const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
+var schools;
+
 function init() {
     global.log("Shell-Schema settings init");
+
+    schools = JSON.parse(String(GLib.file_get_contents(Me.path + '/schools.json')[1]));
 }
 
 function buildPrefsWidget() {
@@ -14,9 +18,12 @@ function buildPrefsWidget() {
 
     let rootbox = buildable.get_object('prefs_widget');
 
-    let schoolbox = buildable.get_object('school-list')
+    //School list
+    let schoolbox = buildable.get_object('school-list');
 
-    schoolbox.append_text("text");
+    for (var i = 0; i < schools.length; i++) {
+        schoolbox.append_text(schools[i]["namn"]+" ("+schools[i]["stad"]+")");
+    }
 
     return rootbox;
 }

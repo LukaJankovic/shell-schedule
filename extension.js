@@ -72,8 +72,7 @@ const ScheduleIndicator = new Lang.Class({
             global.log("no schedule file to delete");
         }
 
-        //let main_monitor = Gdk.Display.get_default().get_monitor(0);
-        let scale_factor = Gdk.Screen.get_default().get_monitor_scale_factor(0)
+        let scale_factor = Gdk.Display.get_default().get_primary_monitor().get_scale_factor();
 
         global.log("scale factor " + scale_factor);
 
@@ -84,8 +83,6 @@ const ScheduleIndicator = new Lang.Class({
 
         let request = Soup.Message.new_from_uri('GET', new Soup.URI(URL));
         session.queue_message(request, ((session, message) => {
-
-            global.log(message.status_code);
 
             if (message.status_code == 200) {
                 let file = Gio.File.new_for_path(Me.path + '/schedule.png');
