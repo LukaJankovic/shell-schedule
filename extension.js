@@ -11,6 +11,8 @@ const Gdk = imports.gi.Gdk;
 const Clutter = imports.gi.Clutter;
 const Cogl = imports.gi.Cogl;
 const Soup = imports.gi.Soup;
+const ExtensionUtils = imports.misc.extensionUtils;
+const Convenience = Me.imports.convenience;
 
 function getWeekNumber() {
     var d = new Date();
@@ -32,7 +34,7 @@ const ScheduleIndicator = new Lang.Class({
         this.icon = new St.Icon({ gicon: gicon, style_class: 'system-status-icon' });
         this.actor.add_child(this.icon);
 
-        //this._loadschedule();
+        this._schema = Convenience.getSettings();
     },
 
     //Overwriting
@@ -79,7 +81,10 @@ const ScheduleIndicator = new Lang.Class({
         let session = new Soup.SessionAsync();
         Soup.Session.prototype.add_feature.call(session, new Soup.ProxyResolverDefault());
 
-        const URL = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid=89920/sv-se&id=na15c&period=&week="+getWeekNumber()+"&colors=32&day=0&width=480&height=600";
+        let classID = this._schema.get_string("classid");
+        let schoolID = this._schema.get_string("schoolid");
+
+        const URL = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid="+schoolID+"/sv-se&id="+classID+"&period=&week="+getWeekNumber()+"&colors=32&day=0&width=480&height=600";
 
         let request = Soup.Message.new_from_uri('GET', new Soup.URI(URL));
         session.queue_message(request, ((session, message) => {

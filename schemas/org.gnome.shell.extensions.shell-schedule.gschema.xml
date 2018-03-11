@@ -1,0 +1,19 @@
+<schemalist gettext-domain="gnome-shell-extensions">
+
+  <schema id="org.gnome.shell.extensions.shell-schedule"
+	  path="/org/gnome/shell/extensions/shell-schedule/">
+
+    <key name="schoolid" type="s">
+      <default>""</default>
+      <summary>School ID</summary>
+      <description>ID of the school</description>
+    </key>
+
+    <key name="classid" type="s">
+      <default>""</default>
+      <summary>ClassID</summary>
+      <description>Class, Personnr, ID, etc.</description>
+    </key>
+
+  </schema>
+</schemalist>
