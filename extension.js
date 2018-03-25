@@ -177,8 +177,11 @@ function enable() {
     }
     
     parent_container.insert_child_at_index(image_container, 2);
-    
-    loadSchedule();
+
+    dateMenu.menu.connect('open-state-changed', (menu, isOpen) => {
+	global.log("menu opened");
+	loadSchedule();
+    });
 }
 
 function disable() {
