@@ -111,16 +111,77 @@ const ScheduleIndicator = new Lang.Class({
 });
 
 let schedule_indicator;
+let parent_container;
+let image_container;
+
+function loadSchedule() {
+    
+    var _schema = Convenience.getSettings();
+    
+    //Delete old schedule file
+    try {
+        let f = Gio.File.new_for_path(Me.path + '/schedule.png');
+        f.delete(Gio.Cancellable.new());
+    } catch(e) {
+        global.log("no schedule file to delete");
+    }
+    
+    let scale_factor = Gdk.Display.get_default().get_primary_monitor().get_scale_factor();
+    
+    global.log("scale factor " + scale_factor);
+    
+    let session = new Soup.SessionAsync();
+    Soup.Session.prototype.add_feature.call(session, new Soup.ProxyResolverDefault());
+    
+    let classID = _schema.get_string("classid");
+    let schoolID = _schema.get_string("schoolid");
+
+    var image = new Clutter.Image();
+    
+    const URL = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid="+schoolID+"/sv-se&id="+classID+"&period=&week="+getWeekNumber()+"&colors=32&day=0&width=480&height=600";
+    
+    let request = Soup.Message.new_from_uri('GET', new Soup.URI(URL));
+    session.queue_message(request, ((session, message) => {
+	
+        if (message.status_code == 200) {
+            let file = Gio.File.new_for_path(Me.path + '/schedule.png');
+            let outstream = file.replace(null, false, Gio.FileCreateFlags.NONE,null);
+            outstream.write_bytes(message.response_body.flatten().get_as_bytes(),null);
+	    
+            let pixbuf = GdkPixbuf.Pixbuf.new_from_file(Me.path + '/schedule.png');
+	    
+            image.set_data(
+                pixbuf.get_pixels(),
+                pixbuf.get_has_alpha() ? Cogl.PixelFormat.RGBA_8888 : Cogl.PixelFormat.RGB_888,
+                480,
+                600,
+                pixbuf.get_rowstride()
+            );
+	    
+            image_container.set_content(image);
+        }
+    }));
+}
 
 function init() {
-    schedule_indicator = new ScheduleIndicator();
+    //schedule_indicator = new ScheduleIndicator();
 }
 
 function enable() {
-    Main.panel.addToStatusArea("ScheduleIndicator", schedule_indicator);
+    //Main.panel.addToStatusArea("ScheduleIndicator", schedule_indicator);
+    var dateMenu = Main.panel.statusArea.dateMenu;
+    parent_container = dateMenu.menu.box.get_children()[0].get_children()[0];
+
+/*    var test = new St.Label({text: "test"});
+      parent_container.insert_child_at_index(test, 2);*/
+    
+    image_container = new Clutter.Actor({height: 600, width: 480});
+    parent_container.insert_child_at_index(image_container, 2);
+    
+    loadSchedule();
 }
 
 function disable() {
-    schedule_indicator.stop();
-    schedule_indicator.destroy();
+    //schedule_indicator.stop();
+    //schedule_indicator.destroy();
 }
