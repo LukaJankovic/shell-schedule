@@ -1,6 +1,6 @@
 # Shell Schedule
 
-Instantly view your novasoftware schedule in the gnome-shell!
+Instantly view your novasoftware schedule in the date menu of gnome-shell!
 ![screenshot](https://raw.githubusercontent.com/LukaJankovic/shell-schedule/master/images/screenshot.png)
 
 ## Installation
