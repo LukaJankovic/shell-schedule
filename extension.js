@@ -61,10 +61,14 @@ const ScheduleIndicator = new Lang.Class({
             this.image = new Clutter.Image();
         }
 
+        let scale_factor = St.ThemeContext.get_for_stage(global.stage).scale_factor;
+
         if (!this.image_actor) {
-            this.image_actor = new Clutter.Actor({height: 600, width: 480});
+            this.image_actor = new Clutter.Actor({height: 600*scale_factor, width: 480*scale_factor});
             this.image_item.actor.add_actor(this.image_actor);
         }
+
+        this.image_actor.set_size(480*scale_factor, 600*scale_factor);
 
         //Delete old schedule file
         try {
@@ -73,10 +77,6 @@ const ScheduleIndicator = new Lang.Class({
         } catch(e) {
             global.log("no schedule file to delete");
         }
-
-        let scale_factor = Gdk.Display.get_default().get_primary_monitor().get_scale_factor();
-
-        global.log("scale factor " + scale_factor);
 
         let session = new Soup.SessionAsync();
         Soup.Session.prototype.add_feature.call(session, new Soup.ProxyResolverDefault());
