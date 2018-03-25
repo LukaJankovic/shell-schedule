@@ -22,94 +22,6 @@ function getWeekNumber() {
     return weekNo;
 }
 
-const ScheduleIndicator = new Lang.Class({
-    Name: "ScheduleIndicator",
-    Extends: PanelMenu.Button,
-
-    _init: function() {
-        this.parent(0.0, "ScheduleIndicator");
-
-        let gicon = Gio.icon_new_for_string(Me.path + "/icons/clock.svg");
-
-        this.icon = new St.Icon({ gicon: gicon, style_class: 'system-status-icon' });
-        this.actor.add_child(this.icon);
-
-        this._schema = Convenience.getSettings();
-    },
-
-    //Overwriting
-    _onEvent: function(actor, event) {
-
-        if ((event.type() == Clutter.EventType.TOUCH_BEGIN ||
-             event.type() == Clutter.EventType.BUTTON_PRESS) &&
-             !this.menu.isOpen) {
-
-            this._loadschedule();
-        }
-
-        return(this.parent(actor, event));
-    },
-
-    _loadschedule: function() {
-
-        if (!this.image_item) {
-            this.image_item = new PopupMenu.PopupBaseMenuItem({can_focus: false, reactive: false});
-            this.menu.addMenuItem(this.image_item);
-        }
-
-        if (!this.image) {
-            this.image = new Clutter.Image();
-        }
-
-        let scale_factor = St.ThemeContext.get_for_stage(global.stage).scale_factor;
-
-        if (!this.image_actor) {
-            this.image_actor = new Clutter.Actor({height: 600*scale_factor, width: 480*scale_factor});
-            this.image_item.actor.add_actor(this.image_actor);
-        }
-
-        this.image_actor.set_size(480*scale_factor, 600*scale_factor);
-
-        //Delete old schedule file
-        try {
-            let f = Gio.File.new_for_path(Me.path + '/schedule.png');
-            f.delete(Gio.Cancellable.new());
-        } catch(e) {
-            global.log("no schedule file to delete");
-        }
-
-        let session = new Soup.SessionAsync();
-        Soup.Session.prototype.add_feature.call(session, new Soup.ProxyResolverDefault());
-
-        let classID = this._schema.get_string("classid");
-        let schoolID = this._schema.get_string("schoolid");
-
-        const URL = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid="+schoolID+"/sv-se&id="+classID+"&period=&week="+getWeekNumber()+"&colors=32&day=0&width=480&height=600";
-
-        let request = Soup.Message.new_from_uri('GET', new Soup.URI(URL));
-        session.queue_message(request, ((session, message) => {
-
-            if (message.status_code == 200) {
-                let file = Gio.File.new_for_path(Me.path + '/schedule.png');
-                let outstream = file.replace(null, false, Gio.FileCreateFlags.NONE,null);
-                outstream.write_bytes(message.response_body.flatten().get_as_bytes(),null);
-
-                let pixbuf = GdkPixbuf.Pixbuf.new_from_file(Me.path + '/schedule.png');
-
-                this.image.set_data(
-                        pixbuf.get_pixels(),
-                        pixbuf.get_has_alpha() ? Cogl.PixelFormat.RGBA_8888 : Cogl.PixelFormat.RGB_888,
-                        480,
-                        600,
-                        pixbuf.get_rowstride()
-                        );
-
-                this.image_actor.set_content(this.image);
-            }
-        }));
-    }
-});
-
 let schedule_indicator;
 let parent_container;
 let image_container;
@@ -164,11 +76,10 @@ function loadSchedule() {
 }
 
 function init() {
-    //schedule_indicator = new ScheduleIndicator();
 }
 
 function enable() {
-    //Main.panel.addToStatusArea("ScheduleIndicator", schedule_indicator);
+
     var dateMenu = Main.panel.statusArea.dateMenu;
     parent_container = dateMenu.menu.box.get_children()[0].get_children()[0];
     
@@ -185,9 +96,5 @@ function enable() {
 }
 
 function disable() {
-
     image_container.destroy();
-    
-    //schedule_indicator.stop();
-    //schedule_indicator.destroy();
 }
