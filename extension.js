@@ -171,17 +171,20 @@ function enable() {
     //Main.panel.addToStatusArea("ScheduleIndicator", schedule_indicator);
     var dateMenu = Main.panel.statusArea.dateMenu;
     parent_container = dateMenu.menu.box.get_children()[0].get_children()[0];
-
-/*    var test = new St.Label({text: "test"});
-      parent_container.insert_child_at_index(test, 2);*/
     
-    image_container = new Clutter.Actor({height: 600, width: 480});
+    if (image_container == null) {
+	image_container = new Clutter.Actor({height: 600, width: 480});
+    }
+    
     parent_container.insert_child_at_index(image_container, 2);
     
     loadSchedule();
 }
 
 function disable() {
+
+    image_container.destroy();
+    
     //schedule_indicator.stop();
     //schedule_indicator.destroy();
 }
