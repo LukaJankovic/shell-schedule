@@ -37,11 +37,7 @@ function loadSchedule() {
     } catch(e) {
         global.log("no schedule file to delete");
     }
-    
-    let scale_factor = Gdk.Display.get_default().get_primary_monitor().get_scale_factor();
-    
-    global.log("scale factor " + scale_factor);
-    
+       
     let session = new Soup.SessionAsync();
     Soup.Session.prototype.add_feature.call(session, new Soup.ProxyResolverDefault());
     
@@ -75,8 +71,7 @@ function loadSchedule() {
     }));
 }
 
-function init() {
-}
+function init() {}
 
 function enable() {
 
@@ -84,13 +79,13 @@ function enable() {
     parent_container = dateMenu.menu.box.get_children()[0].get_children()[0];
     
     if (image_container == null) {
-	image_container = new Clutter.Actor({height: 600, width: 480});
+	let scale_factor = St.ThemeContext.get_for_stage(global.stage).scale_factor;
+	image_container = new Clutter.Actor({height: 600 * scale_factor, width: 480 * scale_factor});
     }
     
     parent_container.insert_child_at_index(image_container, 2);
 
     dateMenu.menu.connect('open-state-changed', (menu, isOpen) => {
-	global.log("menu opened");
 	loadSchedule();
     });
 }
