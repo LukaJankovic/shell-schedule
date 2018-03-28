@@ -1,1 +1,9 @@
-{"name": "ShellSchedule", "description": "Schedule viewer for nova software", "uuid": "shell-schedule@am.alite", "shell-version": ["3.26.2", "3.28.0"], "settings-schema": "org.gnome.shell.extensions.shell-schedule"}
+{
+    "name": "ShellSchedule",
+    "description": "Schedule viewer for nova software",
+    "uuid": "shell-schedule@am.alite",
+    "shell-version": ["3.26.2", "3.28.0"],
+    "settings-schema": "org.gnome.shell.extensions.shell-schedule",
+    "url": "https://github.com/LukaJankovic/shell-schedule",
+    "version": 201
+}
