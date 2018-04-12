@@ -25,6 +25,7 @@ function getWeekNumber() {
 let schedule_indicator;
 let parent_container;
 let image_container;
+let current_hidpi;
 
 function loadSchedule() {
     
@@ -36,6 +37,12 @@ function loadSchedule() {
         f.delete(Gio.Cancellable.new());
     } catch(e) {
         global.log("no schedule file to delete");
+    }
+
+    //Check if HiDPi changed
+    if (current_hidpi != St.ThemeContext.get_for_stage(global.stage).scale_factor) {
+    	image_container.destroy();
+    	image_container = new Clutter.Actor({height: 600 * current_hidpi, width: 480 * current_hidpi});
     }
        
     let session = new Soup.SessionAsync();
@@ -79,8 +86,8 @@ function enable() {
     parent_container = dateMenu.menu.box.get_children()[0].get_children()[0];
     
     if (image_container == null) {
-	let scale_factor = St.ThemeContext.get_for_stage(global.stage).scale_factor;
-	image_container = new Clutter.Actor({height: 600 * scale_factor, width: 480 * scale_factor});
+	current_hidpi = St.ThemeContext.get_for_stage(global.stage).scale_factor;
+	image_container = new Clutter.Actor({height: 600 * current_hidpi, width: 480 * current_hidpi});
     }
     
     parent_container.insert_child_at_index(image_container, 2);
