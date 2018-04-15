@@ -27,10 +27,26 @@ let parent_container;
 let image_container;
 let current_hidpi;
 
+function updateHiDPiIfNeeded() {
+	if (current_hidpi != St.ThemeContext.get_for_stage(global.stage).scale_factor) {
+		current_hidpi = St.ThemeContext.get_for_stage(global.stage).scale_factor;
+
+		var dateMenu = Main.panel.statusArea.dateMenu;
+		parent_container = dateMenu.menu.box.get_children()[0].get_children()[0];
+
+		if (image_container != null) {
+			image_container.destroy();
+		}
+
+		image_container = new Clutter.Actor({height: 600 * current_hidpi, width: 480 * current_hidpi});
+
+		parent_container.insert_child_at_index(image_container, 2);
+	}
+}
+
 function loadSchedule() {
-    
     var _schema = Convenience.getSettings();
-    
+
     //Delete old schedule file
     try {
         let f = Gio.File.new_for_path(Me.path + '/schedule.png');
@@ -39,19 +55,7 @@ function loadSchedule() {
         global.log("no schedule file to delete");
     }
 
-    //Check if HiDPi changed
-    if (current_hidpi != St.ThemeContext.get_for_stage(global.stage).scale_factor) {
-    	global.log("hidpi changed");
-	current_hidpi = St.ThemeContext.get_for_stage(global.stage).scale_factor;
-
-    	var dateMenu = Main.panel.statusArea.dateMenu;
-    	parent_container = dateMenu.menu.box.get_children()[0].get_children()[0];
-
-    	image_container.destroy();
-    	image_container = new Clutter.Actor({height: 600 * current_hidpi, width: 480 * current_hidpi});
-
-    	parent_container.insert_child_at_index(image_container, 2);
-    }
+    updateHiDPiIfNeeded();
        
     let session = new Soup.SessionAsync();
     Soup.Session.prototype.add_feature.call(session, new Soup.ProxyResolverDefault());
@@ -90,18 +94,12 @@ function init() {}
 
 function enable() {
 
-    var dateMenu = Main.panel.statusArea.dateMenu;
-    parent_container = dateMenu.menu.box.get_children()[0].get_children()[0];
-    
-    if (image_container == null) {
-	current_hidpi = St.ThemeContext.get_for_stage(global.stage).scale_factor;
-	image_container = new Clutter.Actor({height: 600 * current_hidpi, width: 480 * current_hidpi});
-    }
-    
-    parent_container.insert_child_at_index(image_container, 2);
+	current_hidpi = 0;
+    updateHiDPiIfNeeded();
 
+	var dateMenu = Main.panel.statusArea.dateMenu;
     dateMenu.menu.connect('open-state-changed', (menu, isOpen) => {
-	loadSchedule();
+		loadSchedule();
     });
 }
 
