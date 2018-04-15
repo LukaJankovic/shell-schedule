@@ -41,8 +41,16 @@ function loadSchedule() {
 
     //Check if HiDPi changed
     if (current_hidpi != St.ThemeContext.get_for_stage(global.stage).scale_factor) {
+    	global.log("hidpi changed");
+	current_hidpi = St.ThemeContext.get_for_stage(global.stage).scale_factor;
+
+    	var dateMenu = Main.panel.statusArea.dateMenu;
+    	parent_container = dateMenu.menu.box.get_children()[0].get_children()[0];
+
     	image_container.destroy();
     	image_container = new Clutter.Actor({height: 600 * current_hidpi, width: 480 * current_hidpi});
+
+    	parent_container.insert_child_at_index(image_container, 2);
     }
        
     let session = new Soup.SessionAsync();
