@@ -18,6 +18,7 @@ let schedule_indicator;
 let parent_container;
 let image_container;
 let current_hidpi;
+let enabled;
 
 function getWeekNumber() {
     var d = new Date();
@@ -45,45 +46,47 @@ function updateHiDPiIfNeeded() {
 }
 
 function loadSchedule() {
-    var _schema = Convenience.getSettings();
+	if (enabled == 1) {
+		var _schema = Convenience.getSettings();
 
-    updateHiDPiIfNeeded();
+		updateHiDPiIfNeeded();
 
-    let session = new Soup.SessionAsync();
-    Soup.Session.prototype.add_feature.call(session, new Soup.ProxyResolverDefault());
+		let session = new Soup.SessionAsync();
+		Soup.Session.prototype.add_feature.call(session, new Soup.ProxyResolverDefault());
 
-    let classID = _schema.get_string("classid");
-    let schoolID = _schema.get_string("schoolid");
+		let classID = _schema.get_string("classid");
+		let schoolID = _schema.get_string("schoolid");
 
-    var image = new Clutter.Image();
+		var image = new Clutter.Image();
 
-    const URL = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid="+schoolID+"/sv-se&id="+classID+"&period=&week="+getWeekNumber()+"&colors=32&day=0&width=480&height=600";
+		const URL = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid="+schoolID+"/sv-se&id="+classID+"&period=&week="+getWeekNumber()+"&colors=32&day=0&width=480&height=600";
 
-    let request = Soup.Message.new_from_uri('GET', new Soup.URI(URL));
-    session.queue_message(request, ((session, message) => {
-	
-        if (message.status_code == 200) {
+		let request = Soup.Message.new_from_uri('GET', new Soup.URI(URL));
+		session.queue_message(request, ((session, message) => {
 
-	    	let inputStream = Gio.MemoryInputStream.new_from_bytes(message.response_body_data)
-	    	let pixbuf = GdkPixbuf.Pixbuf.new_from_stream(inputStream, null);
+			if (message.status_code == 200) {
 
-            image.set_data(
-                pixbuf.get_pixels(),
-                pixbuf.get_has_alpha() ? Cogl.PixelFormat.RGBA_8888 : Cogl.PixelFormat.RGB_888,
-                480,
-                600,
-                pixbuf.get_rowstride()
-            );
+				let inputStream = Gio.MemoryInputStream.new_from_bytes(message.response_body_data)
+				let pixbuf = GdkPixbuf.Pixbuf.new_from_stream(inputStream, null);
 
-            image_container.set_content(image);
-        }
-    }));
+				image.set_data(
+				pixbuf.get_pixels(),
+				pixbuf.get_has_alpha() ? Cogl.PixelFormat.RGBA_8888 : Cogl.PixelFormat.RGB_888,
+				480,
+				600,
+				pixbuf.get_rowstride());
+
+				image_container.set_content(image);
+			}
+		}));
+	}
 }
 
 function init() {}
 
 function enable() {
 
+	enabled = 1;
 	current_hidpi = 0;
     updateHiDPiIfNeeded();
 
@@ -94,5 +97,7 @@ function enable() {
 }
 
 function disable() {
+
+	enabled = 0;
     image_container.destroy();
 }
