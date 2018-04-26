@@ -15,5 +15,11 @@
       <description>Class, Personnr, ID, etc.</description>
     </key>
 
+    <key name="schoolindex" type="s">
+	    <default>""</default>
+	    <summary>School Index</summary>
+	    <description>Helps locating currently selected school in settings</description>
+    </key>
+
   </schema>
 </schemalist>
