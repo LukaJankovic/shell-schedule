@@ -8,10 +8,6 @@
             "name": "Abf Vux",
             "id": "85740"
           },
-	  {
-            "name": "Vuxenskolan Göteborg",
-            "id": "L000089"
-          },
           {
             "name": "Bernadottegymnasiet",
             "id": "97710"
@@ -179,10 +175,6 @@
           {
             "name": "Yrkeshögskolan Göteborg Styrma",
             "id": "86400"
-          },
-          {
-            "name": "Nya Påvelund ",
-            "id": "55530"
           }
         ]
       },
@@ -436,10 +428,6 @@
         "city_name": "Skövde",
         "schools": [
           {
-            "name": "Lundenskolan - Skövde",
-            "id": "85190"
-          },
-          {
             "name": "Helenaskolan",
             "id": "58540"
           },
@@ -610,6 +598,15 @@
         ]
       },
       {
+        "city_name": "Göteborg ",
+        "schools": [
+          {
+            "name": "Nya Påvelund ",
+            "id": "55530"
+          }
+        ]
+      },
+      {
         "city_name": "Landvetter",
         "schools": [
           {
@@ -679,14 +676,6 @@
       {
         "city_name": "Stockholm",
         "schools": [
-          {
-            "name": "NTI Gymnasiet Stockholm",
-            "id": "L000070"
-          },
-          {
-            "name": "Nacka Praktiska Gymnasium",
-            "id": "L000121"
-          },
           {
             "name": "Adolf Fredriks Musikklasser",
             "id": "29320"
@@ -1500,15 +1489,6 @@
             "id": "87210"
           }
         ]
-      },
-      {
-        "city_name": "Skärholmen",
-        "schools": [
-          {
-            "name": "Scengymnasiet",
-            "id": "84770"
-          }
-        ]
       }
     ],
     "region_name": "Stockholms län"
@@ -1673,10 +1653,6 @@
         "city_name": "Malmö",
         "schools": [
           {
-            "name": "Realgymnasiet Malmö",
-            "id": "91450"
-          },
-          {
             "name": "Agnesfrids Gymnasium",
             "id": "83830"
           },
@@ -1837,10 +1813,6 @@
           {
             "name": "Berga Gymnasiet",
             "id": "81060"
-          },
-	  {
-            "name": "Vuxenskolan i Eslöv",
-            "id": "93130"
           }
         ]
       },
@@ -2333,15 +2305,6 @@
           {
             "name": "Stiernhööksgymnasiet",
             "id": "56000"
-          }
-        ]
-      },
-      {
-        "city_name": "Ludvika",
-        "schools": [
-          {
-            "name": "Kyrkskolan Ludvika",
-            "id": "90875"
           }
         ]
       }
@@ -2919,84 +2882,17 @@
         "city_name": "Linköping",
         "schools": [
           {
-            "name": "Realgymnasiet Linköping",
-            "id": "82570"
-          },
+            "name": "Is Atlas",
+            "id": "95070"
+          }
+        ]
+      },
+      {
+        "city_name": "Linköping ",
+        "schools": [
           {
             "name": "Ljungsbroskolan",
             "id": "95100"
-          },
-          {
-            "name": "Is Atlas",
-            "id": "95070"
-          },
-          {
-            "name": "Anders Ljungstedts Gymnasium",
-            "id": "81760"
-          },
-          {
-            "name": "Ånestadsskolan",
-            "id": "95160"
-          },
-          {
-            "name": "Berzeliusskolan",
-            "id": "89920"
-          },
-          {
-            "name": "Berzeliusskolan (Grundskola)",
-            "id": "95060"
-          },
-          {
-            "name": "Birgittaskolan",
-            "id": "80120"
-          },
-          {
-            "name": "Björkö Fria Gymnasium",
-            "id": "87510"
-          },
-          {
-            "name": "Ekholmsskolan",
-            "id": "92050"
-          },
-          {
-            "name": "Folkungaskolan",
-            "id": "88450"
-          },
-          {
-            "name": "Fria Läroverken",
-            "id": "83360"
-          },
-          {
-            "name": "Kärna",
-            "id": "95080"
-          },
-          {
-            "name": "Katedralskolan",
-            "id": "88470"
-          },
-          {
-            "name": "Kungsbergsskolan",
-            "id": "92700"
-          },
-          {
-            "name": "Linghemsskolan",
-            "id": "95090"
-          },
-          {
-            "name": "Skäggetorpskolan",
-            "id": "95120"
-          },
-          {
-            "name": "Tokarpsskolan",
-            "id": "95140"
-          },
-          {
-            "name": "Tornhagen",
-            "id": "95150"
-          },
-          {
-            "name": "Vretagymnasiet",
-            "id": "25500"
           }
         ]
       },
@@ -3257,10 +3153,6 @@
         "city_name": "Karlstad",
         "schools": [
           {
-            "name": "Folkuniversitetet Korta Vägen ",
-            "id": "90465"
-          },
-          {
             "name": "Älvkullegymnasiet (Nv, Te, Tim",
             "id": "18200"
           },
@@ -3437,6 +3329,84 @@
   {
     "cities": [
       {
+        "city_name": "Linköping",
+        "schools": [
+          {
+            "name": "Anders Ljungstedts Gymnasium",
+            "id": "81760"
+          },
+          {
+            "name": "Ånestadsskolan",
+            "id": "95160"
+          },
+          {
+            "name": "Berzeliusskolan",
+            "id": "89920"
+          },
+          {
+            "name": "Berzeliusskolan (Grundskola)",
+            "id": "95060"
+          },
+          {
+            "name": "Birgittaskolan",
+            "id": "80120"
+          },
+          {
+            "name": "Björkö Fria Gymnasium",
+            "id": "87510"
+          },
+          {
+            "name": "Ekholmsskolan",
+            "id": "92050"
+          },
+          {
+            "name": "Folkungaskolan",
+            "id": "88450"
+          },
+          {
+            "name": "Fria Läroverken",
+            "id": "83360"
+          },
+          {
+            "name": "Kärna",
+            "id": "95080"
+          },
+          {
+            "name": "Katedralskolan",
+            "id": "88470"
+          },
+          {
+            "name": "Kungsbergsskolan",
+            "id": "92700"
+          },
+          {
+            "name": "Linghemsskolan",
+            "id": "95090"
+          },
+          {
+            "name": "Skäggetorpskolan",
+            "id": "95120"
+          },
+          {
+            "name": "Tokarpsskolan",
+            "id": "95140"
+          },
+          {
+            "name": "Tornhagen",
+            "id": "95150"
+          },
+          {
+            "name": "Vretagymnasiet",
+            "id": "25500"
+          }
+        ]
+      }
+    ],
+    "region_name": "Östergötland"
+  },
+  {
+    "cities": [
+      {
         "city_name": "Varberg",
         "schools": [
           {
@@ -3585,10 +3555,6 @@
       {
         "city_name": "Växjö",
         "schools": [
-          {
-            "name": "Ingelstad Naturbruksgymnasium",
-            "id": "89050"
-          },
           {
             "name": "Bergundaskolan",
             "id": "94270"
@@ -3861,7 +3827,7 @@
   {
     "cities": [
       {
-        "city_name": "Övrigt",
+        "city_name": "",
         "schools": [
           {
             "name": "Bolidenskolan",
@@ -3933,9 +3899,108 @@
             "id": "72780"
           }
         ]
+      },
+      {
+        "city_name": "Karlstad",
+        "schools": [
+          {
+            "name": "Folkuniversitetet Korta Vägen ",
+            "id": "90465"
+          }
+        ]
+      },
+      {
+        "city_name": "Ingelstad",
+        "schools": [
+          {
+            "name": "Ingelstad Naturbruksgymnasium",
+            "id": "89050"
+          }
+        ]
+      },
+      {
+        "city_name": "Ludvika",
+        "schools": [
+          {
+            "name": "Kyrkskolan Ludvika",
+            "id": "90875"
+          }
+        ]
+      },
+      {
+        "city_name": "Skövde",
+        "schools": [
+          {
+            "name": "Lundenskolan - Skövde",
+            "id": "85190"
+          }
+        ]
+      },
+      {
+        "city_name": "Nacka",
+        "schools": [
+          {
+            "name": "Nacka Praktiska Gymnasium",
+            "id": "L000121"
+          }
+        ]
+      },
+      {
+        "city_name": "Stockholm",
+        "schools": [
+          {
+            "name": "NTI Gymnasiet Stockholm",
+            "id": "L000070"
+          }
+        ]
+      },
+      {
+        "city_name": "Linköping",
+        "schools": [
+          {
+            "name": "Realgymnasiet Linköping",
+            "id": "82570"
+          }
+        ]
+      },
+      {
+        "city_name": "Malmö",
+        "schools": [
+          {
+            "name": "Realgymnasiet Malmö",
+            "id": "91450"
+          }
+        ]
+      },
+      {
+        "city_name": "Västerås",
+        "schools": [
+          {
+            "name": "Realgymnasiet Västerås",
+            "id": "93660"
+          }
+        ]
+      },
+      {
+        "city_name": "Göteborg",
+        "schools": [
+          {
+            "name": "Vuxenskolan Göteborg",
+            "id": "L000089"
+          }
+        ]
+      },
+      {
+        "city_name": "Eslöv",
+        "schools": [
+          {
+            "name": "Vuxenskolan i Eslöv",
+            "id": "93130"
+          }
+        ]
       }
     ],
-    "region_name": "Övrigt"
+    "region_name": "tom"
   },
   {
     "cities": [
@@ -4047,10 +4112,6 @@
       {
         "city_name": "Västerås",
         "schools": [
-          {
-            "name": "Realgymnasiet Västerås",
-            "id": "93660"
-          },
           {
             "name": "Carlforsska Gymnasiet",
             "id": "80190"
@@ -4268,5 +4329,19 @@
       }
     ],
     "region_name": "Örebro län "
+  },
+  {
+    "cities": [
+      {
+        "city_name": "Skärholmen",
+        "schools": [
+          {
+            "name": "Scengymnasiet",
+            "id": "84770"
+          }
+        ]
+      }
+    ],
+    "region_name": "Stockholm"
   }
 ]
