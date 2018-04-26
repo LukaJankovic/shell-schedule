@@ -53,7 +53,7 @@ function school_changed() {
     let schoolID = schools[activeItem]["id"];
 
     schema.set_string("schoolid", schoolID);
-    schema.set_string("schoolindex", activeRegion, activeCity, activeItem);
+    schema.set_string("schoolindex", activeRegion+","+activeCity+","+activeItem);
 }
 
 function class_changed() {
@@ -80,7 +80,9 @@ function buildPrefsWidget() {
 
     if (current_school_index) {
         regionbox.set_active(current_school_index[0]);
+        region_changed();
         citiesbox.set_active(current_school_index[1]);
+        cities_changed();
         schoolbox.set_active(current_school_index[2]);
     }
 
