@@ -5,5 +5,5 @@
     "shell-version": ["3.26.2", "3.28.0"],
     "settings-schema": "org.gnome.shell.extensions.shell-schedule",
     "url": "https://github.com/LukaJankovic/shell-schedule",
-    "version": 203
+    "version": 210
 }

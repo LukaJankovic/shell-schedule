@@ -20,7 +20,7 @@ var schema;
 function init() {
     global.log("Shell-Schema settings init");
 
-    regions = JSON.parse(String(GLib.file_get_contents(Me.path + '/schools-new.json')[1]));
+    regions = JSON.parse(String(GLib.file_get_contents(Me.path + '/schools.json')[1]));
     schema = Convenience.getSettings();
 }
 
