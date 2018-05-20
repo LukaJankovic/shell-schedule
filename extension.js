@@ -19,29 +19,41 @@ let parent_container;
 let image_container;
 let current_hidpi;
 let enabled;
+let week;
+let day;
 
-function getWeekNumber() {
-    var d = new Date();
+function getWeekFromDate(d) {
+
+    if (!d) {
+        d = new Date();
+    }
+
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
     var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
     var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1)/7);
     return weekNo;
 }
 
+function create_ui() {
+    var dateMenu = Main.panel.statusArea.dateMenu;
+	parent_container = dateMenu.menu.box.get_children()[0].get_children()[0];
+
+	if (image_container != null) {
+		image_container.destroy();
+	}
+
+	image_container = new Clutter.Actor({height: 600 * current_hidpi, width: 400 * current_hidpi});
+
+	parent_container.insert_child_at_index(image_container, 2);
+}
+
 function updateHiDPiIfNeeded() {
+
+	current_hidpi = St.ThemeContext.get_for_stage(global.stage).scale_factor;
+	create_ui();
+
 	if (current_hidpi != St.ThemeContext.get_for_stage(global.stage).scale_factor) {
-		current_hidpi = St.ThemeContext.get_for_stage(global.stage).scale_factor;
 
-		var dateMenu = Main.panel.statusArea.dateMenu;
-		parent_container = dateMenu.menu.box.get_children()[0].get_children()[0];
-
-		if (image_container != null) {
-			image_container.destroy();
-		}
-
-		image_container = new Clutter.Actor({height: 600 * current_hidpi, width: 480 * current_hidpi});
-
-		parent_container.insert_child_at_index(image_container, 2);
 	}
 }
 
@@ -59,7 +71,7 @@ function loadSchedule() {
 
 		var image = new Clutter.Image();
 
-		const URL = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid="+schoolID+"/sv-se&id="+classID+"&period=&week="+getWeekNumber()+"&colors=32&day=0&width=480&height=600";
+		const URL = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid="+schoolID+"/sv-se&id="+classID+"&period=&week="+week+"&colors=32&day="+day+"&width=400&height=600";
 
 		let request = Soup.Message.new_from_uri('GET', new Soup.URI(URL));
 		session.queue_message(request, ((session, message) => {
@@ -72,7 +84,7 @@ function loadSchedule() {
 				image.set_data(
 				pixbuf.get_pixels(),
 				pixbuf.get_has_alpha() ? Cogl.PixelFormat.RGBA_8888 : Cogl.PixelFormat.RGB_888,
-				480,
+				400,
 				600,
 				pixbuf.get_rowstride());
 
@@ -89,10 +101,21 @@ function enable() {
 	enabled = 1;
 	current_hidpi = 0;
     updateHiDPiIfNeeded();
+    create_ui();
 
 	var dateMenu = Main.panel.statusArea.dateMenu;
     dateMenu.menu.connect('open-state-changed', (menu, isOpen) => {
 		loadSchedule();
+    });
+
+    var calendarItem = dateMenu._calendar;
+    calendarItem.connect('selected-date-changed', (calendar, date) => {
+        if (date != -1) {
+            global.log("day "+date)
+            day = Math.pow(2, date.getDay()-1);
+            week = getWeekFromDate(date);
+            loadSchedule();
+        }
     });
 }
 
