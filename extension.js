@@ -22,7 +22,9 @@ let enabled;
 let week;
 let day;
 
-function getWeekFromDate(d) {
+function getWeekFromDate(date) {
+
+    let d = Object.assign(date);
 
     if (!d) {
         d = new Date();
@@ -105,13 +107,15 @@ function enable() {
 
 	var dateMenu = Main.panel.statusArea.dateMenu;
     dateMenu.menu.connect('open-state-changed', (menu, isOpen) => {
+        date = new Date();
+        day = Math.pow(2, date.getDay()-1);
+        week = getWeekFromDate(date);
 		loadSchedule();
     });
 
     var calendarItem = dateMenu._calendar;
     calendarItem.connect('selected-date-changed', (calendar, date) => {
         if (date != -1) {
-            global.log("day "+date)
             day = Math.pow(2, date.getDay()-1);
             week = getWeekFromDate(date);
             loadSchedule();
